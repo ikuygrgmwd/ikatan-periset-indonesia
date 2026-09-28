@@ -179,33 +179,50 @@ export default function MonevPage() {
                 { label: "Realisasi", key: "realisasi", placeholder: "Contoh: 75 Peserta" },
               ].map(({ label, key, placeholder }) => (
                 <div key={key}>
-                  <label className="block text-xs font-semibold text-slate-600 mb-1.5">{label}</label>
-                  <input type="text" value={(form as Record<string, string | number>)[key] as string || ""} onChange={(e) => setForm((f) => ({ ...f, [key]: e.target.value }))}
+                  <label className="block text-xs font-bold text-slate-700 mb-1.5">{label}</label>
+                  <input
+                    type="text"
+                    value={(form as Record<string, string | number>)[key] as string || ""}
+                    onChange={(e) => setForm((f) => ({ ...f, [key]: e.target.value }))}
                     placeholder={placeholder}
-                    className="w-full px-3 py-2.5 rounded-xl border border-slate-200 text-sm outline-none focus:ring-2 focus:ring-blue-500" />
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 bg-white text-slate-900 placeholder:text-slate-400 text-sm outline-none focus:ring-2 focus:ring-blue-500 shadow-xs"
+                  />
                 </div>
               ))}
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-semibold text-slate-600 mb-1.5">
+                  <label className="block text-xs font-bold text-slate-700 mb-1.5">
                     Capaian (%): <span className="text-blue-600 font-bold">{form.capaian}%</span>
                   </label>
-                  <input type="range" min={0} max={150} value={form.capaian}
+                  <input
+                    type="range"
+                    min={0}
+                    max={150}
+                    value={form.capaian}
                     onChange={(e) => setForm((f) => ({ ...f, capaian: Number(e.target.value) }))}
-                    className="w-full h-2 accent-blue-600" />
+                    className="w-full h-2 accent-blue-600"
+                  />
                 </div>
                 <div>
-                  <label className="block text-xs font-semibold text-slate-600 mb-1.5">Periode</label>
-                  <input type="text" value={form.periode} onChange={(e) => setForm((f) => ({ ...f, periode: e.target.value }))}
+                  <label className="block text-xs font-bold text-slate-700 mb-1.5">Periode</label>
+                  <input
+                    type="text"
+                    value={form.periode}
+                    onChange={(e) => setForm((f) => ({ ...f, periode: e.target.value }))}
                     placeholder="Q3 2026"
-                    className="w-full px-3 py-2.5 rounded-xl border border-slate-200 text-sm outline-none focus:ring-2 focus:ring-blue-500" />
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 bg-white text-slate-900 placeholder:text-slate-400 text-sm outline-none focus:ring-2 focus:ring-blue-500 shadow-xs"
+                  />
                 </div>
               </div>
               <div>
-                <label className="block text-xs font-semibold text-slate-600 mb-1.5">Keterangan</label>
-                <textarea rows={3} value={form.keterangan} onChange={(e) => setForm((f) => ({ ...f, keterangan: e.target.value }))}
+                <label className="block text-xs font-bold text-slate-700 mb-1.5">Keterangan</label>
+                <textarea
+                  rows={3}
+                  value={form.keterangan}
+                  onChange={(e) => setForm((f) => ({ ...f, keterangan: e.target.value }))}
                   placeholder="Catatan atau keterangan tambahan"
-                  className="w-full px-3 py-2.5 rounded-xl border border-slate-200 text-sm outline-none focus:ring-2 focus:ring-blue-500 resize-none" />
+                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 bg-white text-slate-900 placeholder:text-slate-400 text-sm outline-none focus:ring-2 focus:ring-blue-500 resize-none shadow-xs"
+                />
               </div>
             </div>
             <div className="flex justify-end gap-3 px-6 py-4 border-t border-slate-200">
