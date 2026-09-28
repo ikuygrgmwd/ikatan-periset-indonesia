@@ -1,9 +1,6 @@
 import Link from "next/link";
 import { MOCK_NEWS } from "@/lib/mock-data";
 import { Calendar, ArrowRight, Users, BookOpen, Award, TrendingUp, ChevronRight } from "lucide-react";
-import { HeroGlobe } from "@/components/public/hero-globe";
-import { ResearchFocus } from "@/components/public/research-focus";
-import { ContactSection } from "@/components/public/contact-section";
 
 function NewsCard({ news }: { news: (typeof MOCK_NEWS)[0] }) {
   const categoryColors: Record<string, string> = {
@@ -72,68 +69,43 @@ export default function HomePage() {
   return (
     <>
       {/* Hero Section */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-slate-900 via-blue-950 to-indigo-950 text-white">
+      <section className="relative overflow-hidden bg-gradient-to-br from-slate-900 via-blue-950 to-indigo-900 text-white">
         {/* Background blobs */}
         <div className="absolute inset-0 pointer-events-none">
           <div className="absolute top-20 left-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl" />
           <div className="absolute bottom-10 right-1/4 w-80 h-80 bg-indigo-500/10 rounded-full blur-3xl" />
         </div>
 
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 md:py-24 lg:py-28">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
-            {/* Left Content */}
-            <div className="lg:col-span-7">
-              <span className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-500/20 text-blue-300 text-xs sm:text-sm font-semibold border border-blue-500/30 mb-6 backdrop-blur-md">
-                <span className="w-2 h-2 rounded-full bg-cyan-400 animate-ping" />
-                🔬 Portal Resmi Ikatan Periset Indonesia
-              </span>
-              <h1 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold leading-[1.15] tracking-tight mb-6">
-                Mendorong{" "}
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-cyan-300 to-indigo-300">
-                  Inovasi Riset
-                </span>{" "}
-                untuk Indonesia Maju
-              </h1>
-              <p className="text-slate-300 text-base sm:text-lg leading-relaxed mb-8 max-w-2xl">
-                Ikatan Periset Indonesia (IPI) adalah organisasi profesi yang
-                mewadahi para periset dan ilmuwan Indonesia. Kami berkomitmen
-                membangun ekosistem riset yang tangguh, kolaboratif, dan berdampak nyata bagi kemajuan bangsa.
-              </p>
-              <div className="flex flex-wrap gap-4 mb-10">
-                <Link
-                  href="/#berita"
-                  className="px-6 py-3.5 rounded-xl bg-blue-600 hover:bg-blue-500 font-semibold text-white shadow-lg shadow-blue-900/40 transition-all active:scale-95 flex items-center gap-2"
-                >
-                  Lihat Berita Riset <ChevronRight className="w-4 h-4" />
-                </Link>
-                <Link
-                  href="/#tentang"
-                  className="px-6 py-3.5 rounded-xl bg-white/10 hover:bg-white/20 font-semibold text-white border border-white/20 backdrop-blur-md transition-all"
-                >
-                  Tentang Kami
-                </Link>
-              </div>
-
-              {/* Quick Trust Badges */}
-              <div className="pt-6 border-t border-white/10 grid grid-cols-3 gap-4 text-xs">
-                <div>
-                  <p className="text-xl font-extrabold text-white">2.400+</p>
-                  <p className="text-slate-400 text-[11px] mt-0.5">Periset Terdaftar</p>
-                </div>
-                <div>
-                  <p className="text-xl font-extrabold text-cyan-300">34</p>
-                  <p className="text-slate-400 text-[11px] mt-0.5">Provinsi Terhubung</p>
-                </div>
-                <div>
-                  <p className="text-xl font-extrabold text-blue-300">8.750+</p>
-                  <p className="text-slate-400 text-[11px] mt-0.5">Publikasi Scopus</p>
-                </div>
-              </div>
-            </div>
-
-            {/* Right Visual: Interactive 3D Research Network & Globe */}
-            <div className="lg:col-span-5 flex justify-center">
-              <HeroGlobe />
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 md:py-36">
+          <div className="max-w-3xl">
+            <span className="inline-block px-4 py-1.5 rounded-full bg-blue-500/20 text-blue-300 text-sm font-semibold border border-blue-500/30 mb-6">
+              🔬 Portal Resmi Ikatan Periset Indonesia
+            </span>
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold leading-tight mb-6">
+              Mendorong{" "}
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-300">
+                Inovasi Riset
+              </span>{" "}
+              untuk Indonesia Maju
+            </h1>
+            <p className="text-slate-300 text-lg leading-relaxed mb-8 max-w-2xl">
+              Ikatan Periset Indonesia (IPI) adalah organisasi profesi yang
+              mewadahi para periset dan ilmuwan Indonesia. Kami berkomitmen
+              membangun ekosistem riset yang kuat demi kemajuan bangsa.
+            </p>
+            <div className="flex flex-wrap gap-4">
+              <Link
+                href="/#berita"
+                className="px-6 py-3 rounded-xl bg-blue-600 hover:bg-blue-500 font-semibold text-white shadow-lg shadow-blue-900/40 transition-all active:scale-95 flex items-center gap-2"
+              >
+                Lihat Berita <ChevronRight className="w-4 h-4" />
+              </Link>
+              <Link
+                href="/#tentang"
+                className="px-6 py-3 rounded-xl bg-white/10 hover:bg-white/20 font-semibold text-white border border-white/20 transition-all"
+              >
+                Tentang Kami
+              </Link>
             </div>
           </div>
         </div>
@@ -157,9 +129,6 @@ export default function HomePage() {
           </div>
         </div>
       </section>
-
-      {/* Research Priority Clusters */}
-      <ResearchFocus />
 
       {/* Tentang Kami */}
       <section id="tentang" className="py-20 bg-slate-50">
@@ -254,9 +223,6 @@ export default function HomePage() {
           </Link>
         </div>
       </section>
-
-      {/* Hubungi Kami / Kontak Sekretariat */}
-      <ContactSection />
     </>
   );
 }

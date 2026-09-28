@@ -37,17 +37,10 @@ export function PublicFooter() {
           <div>
             <h3 className="font-semibold text-white mb-4">Navigasi</h3>
             <ul className="space-y-2 text-sm">
-              {[
-                { label: "Beranda", href: "/" },
-                { label: "Berita Riset", href: "/#berita" },
-                { label: "Bidang Riset", href: "/#program" },
-                { label: "Tentang Kami", href: "/#tentang" },
-                { label: "Hubungi Kami", href: "/#kontak" },
-                { label: "Portal Internal", href: "/login" },
-              ].map((item) => (
-                <li key={item.label}>
-                  <a href={item.href} className="hover:text-blue-400 transition-colors">
-                    {item.label}
+              {["Beranda", "Berita", "Tentang Kami", "Program Kerja", "Kontak"].map((item) => (
+                <li key={item}>
+                  <a href="#" className="hover:text-blue-400 transition-colors">
+                    {item}
                   </a>
                 </li>
               ))}

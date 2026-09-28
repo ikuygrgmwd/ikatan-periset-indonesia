@@ -107,22 +107,22 @@ export default function SettingsPage() {
               { label: "Nomor Telepon", key: "phone" },
             ].map(({ label, key }) => (
               <div key={key}>
-                <label className="block text-xs font-bold text-slate-700 mb-1.5">{label}</label>
+                <label className="block text-xs font-semibold text-slate-600 mb-1.5">{label}</label>
                 <input
                   type="text"
                   value={(profileForm as Record<string, string>)[key]}
                   onChange={(e) => setProfileForm((f) => ({ ...f, [key]: e.target.value }))}
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 bg-white text-slate-900 placeholder:text-slate-400 text-sm outline-none focus:ring-2 focus:ring-blue-500 shadow-xs"
+                  className="w-full px-3 py-2.5 rounded-xl border border-slate-200 text-sm outline-none focus:ring-2 focus:ring-blue-500"
                 />
               </div>
             ))}
             <div className="md:col-span-2">
-              <label className="block text-xs font-bold text-slate-700 mb-1.5">Bio / Deskripsi</label>
+              <label className="block text-xs font-semibold text-slate-600 mb-1.5">Bio / Deskripsi</label>
               <textarea
                 rows={3}
                 value={profileForm.bio}
                 onChange={(e) => setProfileForm((f) => ({ ...f, bio: e.target.value }))}
-                className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 bg-white text-slate-900 placeholder:text-slate-400 text-sm outline-none focus:ring-2 focus:ring-blue-500 resize-none shadow-xs"
+                className="w-full px-3 py-2.5 rounded-xl border border-slate-200 text-sm outline-none focus:ring-2 focus:ring-blue-500 resize-none"
               />
             </div>
           </div>
@@ -169,14 +169,14 @@ export default function SettingsPage() {
             { label: "Konfirmasi Password Baru", key: "confirmPassword", showKey: "confirm" },
           ].map(({ label, key, showKey }) => (
             <div key={key}>
-              <label className="block text-xs font-bold text-slate-700 mb-1.5">{label}</label>
+              <label className="block text-xs font-semibold text-slate-600 mb-1.5">{label}</label>
               <div className="relative">
                 <input
                   type={(showPass as Record<string, boolean>)[showKey] ? "text" : "password"}
                   value={(passwordForm as Record<string, string>)[key]}
                   onChange={(e) => setPasswordForm((f) => ({ ...f, [key]: e.target.value }))}
                   placeholder="••••••••"
-                  className="w-full px-3.5 py-2.5 pr-11 rounded-xl border border-slate-300 bg-white text-slate-900 placeholder:text-slate-400 text-sm outline-none focus:ring-2 focus:ring-blue-500 shadow-xs"
+                  className="w-full px-3 py-2.5 pr-11 rounded-xl border border-slate-200 text-sm outline-none focus:ring-2 focus:ring-blue-500"
                 />
                 <button
                   type="button"

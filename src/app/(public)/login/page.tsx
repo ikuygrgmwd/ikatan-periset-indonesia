@@ -65,7 +65,7 @@ export default function LoginPage() {
 
             {/* Email */}
             <div>
-              <label className="block text-sm font-semibold text-blue-100 mb-1.5">
+              <label className="block text-sm font-medium text-blue-100 mb-1.5">
                 Email
               </label>
               <input
@@ -73,14 +73,14 @@ export default function LoginPage() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="admin@periset.or.id"
-                className="w-full px-4 py-3 rounded-xl bg-white border border-slate-300 text-slate-900 placeholder:text-slate-400 outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-500 transition-all text-sm font-medium shadow-sm"
+                className="w-full px-4 py-3 rounded-xl bg-white/10 border border-white/20 text-white placeholder:text-blue-300/60 outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent transition-all text-sm"
                 autoComplete="email"
               />
             </div>
 
             {/* Password */}
             <div>
-              <label className="block text-sm font-semibold text-blue-100 mb-1.5">
+              <label className="block text-sm font-medium text-blue-100 mb-1.5">
                 Password
               </label>
               <div className="relative">
@@ -89,13 +89,13 @@ export default function LoginPage() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••"
-                  className="w-full px-4 py-3 pr-12 rounded-xl bg-white border border-slate-300 text-slate-900 placeholder:text-slate-400 outline-none focus:ring-2 focus:ring-blue-400 focus:border-blue-500 transition-all text-sm font-medium shadow-sm"
+                  className="w-full px-4 py-3 pr-12 rounded-xl bg-white/10 border border-white/20 text-white placeholder:text-blue-300/60 outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent transition-all text-sm"
                   autoComplete="current-password"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-700 transition-colors"
+                  className="absolute right-3.5 top-1/2 -translate-y-1/2 text-blue-300 hover:text-white transition-colors"
                 >
                   {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
                 </button>

@@ -242,54 +242,35 @@ export default function ProgramKerjaPage() {
             </div>
             <div className="p-6 space-y-4">
               <div>
-                <label className="block text-xs font-bold text-slate-700 mb-1.5">Nama Program</label>
-                <input
-                  type="text"
-                  value={form.nama}
-                  onChange={(e) => setForm((f) => ({ ...f, nama: e.target.value }))}
+                <label className="block text-xs font-semibold text-slate-600 mb-1.5">Nama Program</label>
+                <input type="text" value={form.nama} onChange={(e) => setForm((f) => ({ ...f, nama: e.target.value }))}
                   placeholder="Nama lengkap program"
-                  className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 bg-white text-slate-900 placeholder:text-slate-400 text-sm outline-none focus:ring-2 focus:ring-blue-500 shadow-xs"
-                />
+                  className="w-full px-3 py-2.5 rounded-xl border border-slate-200 text-sm outline-none focus:ring-2 focus:ring-blue-500" />
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 mb-1.5">Divisi / Tim</label>
-                  <input
-                    type="text"
-                    value={form.divisi}
-                    onChange={(e) => setForm((f) => ({ ...f, divisi: e.target.value }))}
+                  <label className="block text-xs font-semibold text-slate-600 mb-1.5">Divisi / Tim</label>
+                  <input type="text" value={form.divisi} onChange={(e) => setForm((f) => ({ ...f, divisi: e.target.value }))}
                     placeholder="Divisi terkait"
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 bg-white text-slate-900 placeholder:text-slate-400 text-sm outline-none focus:ring-2 focus:ring-blue-500 shadow-xs"
-                  />
+                    className="w-full px-3 py-2.5 rounded-xl border border-slate-200 text-sm outline-none focus:ring-2 focus:ring-blue-500" />
                 </div>
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 mb-1.5">Penanggung Jawab</label>
-                  <input
-                    type="text"
-                    value={form.penanggungJawab}
-                    onChange={(e) => setForm((f) => ({ ...f, penanggungJawab: e.target.value }))}
+                  <label className="block text-xs font-semibold text-slate-600 mb-1.5">Penanggung Jawab</label>
+                  <input type="text" value={form.penanggungJawab} onChange={(e) => setForm((f) => ({ ...f, penanggungJawab: e.target.value }))}
                     placeholder="Nama PJ"
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 bg-white text-slate-900 placeholder:text-slate-400 text-sm outline-none focus:ring-2 focus:ring-blue-500 shadow-xs"
-                  />
+                    className="w-full px-3 py-2.5 rounded-xl border border-slate-200 text-sm outline-none focus:ring-2 focus:ring-blue-500" />
                 </div>
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 mb-1.5">Tenggat Waktu</label>
-                  <input
-                    type="date"
-                    value={form.tenggat}
-                    onChange={(e) => setForm((f) => ({ ...f, tenggat: e.target.value }))}
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 bg-white text-slate-900 text-sm outline-none focus:ring-2 focus:ring-blue-500 shadow-xs"
-                  />
+                  <label className="block text-xs font-semibold text-slate-600 mb-1.5">Tenggat Waktu</label>
+                  <input type="date" value={form.tenggat} onChange={(e) => setForm((f) => ({ ...f, tenggat: e.target.value }))}
+                    className="w-full px-3 py-2.5 rounded-xl border border-slate-200 text-sm outline-none focus:ring-2 focus:ring-blue-500 bg-white" />
                 </div>
                 <div>
-                  <label className="block text-xs font-bold text-slate-700 mb-1.5">Status</label>
-                  <select
-                    value={form.status}
-                    onChange={(e) => setForm((f) => ({ ...f, status: e.target.value as ProgramKerja["status"] }))}
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 bg-white text-slate-900 text-sm outline-none focus:ring-2 focus:ring-blue-500 shadow-xs"
-                  >
+                  <label className="block text-xs font-semibold text-slate-600 mb-1.5">Status</label>
+                  <select value={form.status} onChange={(e) => setForm((f) => ({ ...f, status: e.target.value as ProgramKerja["status"] }))}
+                    className="w-full px-3 py-2.5 rounded-xl border border-slate-200 text-sm outline-none focus:ring-2 focus:ring-blue-500 bg-white">
                     <option value="belum-mulai">Belum Mulai</option>
                     <option value="berjalan">Berjalan</option>
                     <option value="selesai">Selesai</option>

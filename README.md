@@ -1,81 +1,36 @@
-# Ikatan Periset Indonesia - Web Portal & Internal Dashboard
+This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/ikuygrgmwd/ikatan-periset-indonesia)
+## Getting Started
 
-A modern fullstack web application built with **Next.js (App Router)**, **TypeScript**, **Tailwind CSS**, and **shadcn/ui** designed for the **Ikatan Periset Indonesia (IPI)**.
+First, run the development server:
 
----
-
-## 🚀 Live Demo
-
-- **Hosted URL**: [https://ikatan-periset-indonesia.vercel.app](https://ikatan-periset-indonesia.vercel.app) *(Replace with your actual deployed Vercel URL)*
-- **Demo Credentials**:
-  - **Email**: `admin@periset.or.id`
-  - **Password**: `admin123`
-
----
-
-## 📖 Project Overview
-
-This platform is divided into two primary sections:
-
-### 1. Public Guest Portal
-- **Header & Navigation**: Accessible branding with navigation links to news, organization profile, and a dedicated login button.
-- **Hero Section**: Introduces the vision, mission, and profile of the Indonesian researcher community.
-- **Featured News & Articles**: Latest publications, announcements, and research milestones displayed as cards with category badges.
-- **Article Details (`/berita/[id]`)**: Full-page reader for research news with dynamic static generation (`generateStaticParams`).
-
-### 2. Authenticated Internal Dashboard (`/dashboard`)
-- **Dashboard Overview**: Key performance indicators, researcher counts, active work programs, and evaluation metrics.
-- **Researcher & Employee Management (`/dashboard/karyawan`)**: Data table with modal forms to add, view, edit, and delete researcher records (NIP, research field, position, and contacts).
-- **Work Programs (`/dashboard/program-kerja`)**: Progress tracking, status filters, and milestone management.
-- **Monitoring & Evaluation (Monev) (`/dashboard/monev`)**: Quantitative performance index comparing targets against realization.
-- **Account Settings (`/dashboard/settings`)**: Profile customization, password updates, and role/permission management.
-
----
-
-## 🛠️ Tech Stack
-
-- **Framework**: Next.js 16 (App Router)
-- **Language**: TypeScript
-- **Styling**: Tailwind CSS v4 & shadcn/ui
-- **Icons**: Lucide React
-- **State & Auth**: React Context with LocalStorage session handling (ready for Supabase Auth)
-
----
-
-## 💻 Local Setup Instructions
-
-Follow these steps to run the project locally on your machine:
-
-### 1. Clone the repository
-```bash
-git clone https://github.com/ikuygrgmwd/ikatan-periset-indonesia.git
-cd ikatan-periset-indonesia
-```
-
-### 2. Install dependencies
-```bash
-npm install
-```
-
-### 3. Run the development server
 ```bash
 npm run dev
+# or
+yarn dev
+# or
+pnpm dev
+# or
+bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) in your browser.
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-### 4. Build for production (optional)
-```bash
-npm run build
-npm run start
-```
+You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
----
+This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
-## ☁️ Deploy to Vercel
+## Learn More
 
-You can deploy this project to Vercel with one click:
+To learn more about Next.js, take a look at the following resources:
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/ikuygrgmwd/ikatan-periset-indonesia)
+- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
+- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+
+You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+
+## Deploy on Vercel
+
+The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+
+Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
