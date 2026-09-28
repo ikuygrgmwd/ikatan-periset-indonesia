@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter, usePathname } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useAuth } from "@/contexts/auth-context";
 import { FlaskConical, Menu, X } from "lucide-react";
 import { useState } from "react";

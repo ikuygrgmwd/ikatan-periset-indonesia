@@ -1,3 +1,4 @@
+import { IndonesiaEarth } from "@/components/public/indonesia-earth";
 import Link from "next/link";
 import { MOCK_NEWS } from "@/lib/mock-data";
 import { Calendar, ArrowRight, Users, BookOpen, Award, TrendingUp, ChevronRight } from "lucide-react";
@@ -68,6 +69,7 @@ const stats = [
 export default function HomePage() {
   return (
     <>
+      <IndonesiaEarth />
       {/* Hero Section */}
       <section className="relative overflow-hidden bg-gradient-to-br from-slate-900 via-blue-950 to-indigo-900 text-white">
         {/* Background blobs */}

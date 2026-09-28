@@ -1,69 +1,144 @@
 "use client";
 
-import React, { createContext, useContext, useState, useEffect } from "react";
-import { type User, MOCK_USERS, MOCK_CREDENTIALS } from "@/lib/mock-data";
+import { createContext, useContext, useEffect, useRef, useState } from "react";
+import type { User } from "@/lib/mock-data";
+import {
+  applyAction,
+  createSeedDatabase,
+  DB_KEY,
+  SESSION_KEY,
+  type Action,
+  type Database,
+} from "@/lib/research-store";
 
 type AuthContextType = {
   user: User | null;
   isLoading: boolean;
+  database: Database;
+  storageError: string;
   login: (email: string, password: string) => Promise<{ error?: string }>;
   logout: () => void;
+  mutate: (action: Action) => { error?: string };
 };
-
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
-
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [user, setUser] = useState<User | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-
+  const [database, setDatabase] = useState<Database>(createSeedDatabase);
+  const [sessionId, setSessionId] = useState<string | null>(null);
+  const [isLoading, setLoading] = useState(true);
+  const [storageError, setStorageError] = useState("");
+  const dbRef = useRef(database);
+  const sessionRef = useRef(sessionId);
   useEffect(() => {
-    // Cek session dari localStorage
-    try {
-      const stored = localStorage.getItem("ipi_user");
-      if (stored) {
-        setUser(JSON.parse(stored));
+    const restore = () => {
+      try {
+        const raw = localStorage.getItem(DB_KEY);
+        const db: Database = raw ? JSON.parse(raw) : createSeedDatabase();
+        if (
+          db.version !== 1 ||
+          !Array.isArray(db.accounts) ||
+          !Array.isArray(db.profiles) ||
+          !Array.isArray(db.publications) ||
+          !Array.isArray(db.copyrights) ||
+          !Array.isArray(db.works)
+        )
+          throw new Error("Invalid database");
+        if (!raw) localStorage.setItem(DB_KEY, JSON.stringify(db));
+        const storedId = localStorage.getItem(SESSION_KEY);
+        const id = db.accounts.some((a) => a.id === storedId) ? storedId : null;
+        dbRef.current = db;
+        sessionRef.current = id;
+        setDatabase(db);
+        setSessionId(id);
+        setStorageError("");
+      } catch {
+        setStorageError(
+          "Penyimpanan lokal tidak tersedia atau data tidak valid. Perubahan tidak akan disimpan sampai penyimpanan tersedia.",
+        );
       }
-    } catch {
-      // ignore
-    }
-    setIsLoading(false);
+      setLoading(false);
+    };
+    restore();
+    const sync = (event: StorageEvent) => {
+      if (!event.key || [DB_KEY, SESSION_KEY].includes(event.key)) restore();
+    };
+    window.addEventListener("storage", sync);
+    return () => window.removeEventListener("storage", sync);
   }, []);
-
-  const login = async (
-    email: string,
-    password: string
-  ): Promise<{ error?: string }> => {
-    // Simulasi delay network
-    await new Promise((res) => setTimeout(res, 800));
-
-    if (
-      email === MOCK_CREDENTIALS.email &&
-      password === MOCK_CREDENTIALS.password
-    ) {
-      const loggedUser = MOCK_USERS.find((u) => u.email === email);
-      if (loggedUser) {
-        setUser(loggedUser);
-        localStorage.setItem("ipi_user", JSON.stringify(loggedUser));
-        return {};
-      }
+  const login = async (email: string, password: string) => {
+    // Keep the original demo admin credential working as a login alias.
+    const normalized = email.trim().toLowerCase();
+    const account = dbRef.current.accounts.find(
+      (a) =>
+        a.email === normalized ||
+        (normalized === "admin@periset.or.id" &&
+          a.email === "admin@periset.id"),
+    );
+    if (!account || account.password !== password)
+      return { error: "Email atau password salah." };
+    try {
+      localStorage.setItem(SESSION_KEY, account.id);
+    } catch {
+      return {
+        error:
+          "Penyimpanan browser tidak tersedia. Aktifkan penyimpanan untuk masuk.",
+      };
     }
-    return { error: "Email atau password salah." };
+    sessionRef.current = account.id;
+    setSessionId(account.id);
+    return {};
   };
-
   const logout = () => {
-    setUser(null);
-    localStorage.removeItem("ipi_user");
+    sessionRef.current = null;
+    setSessionId(null);
+    try {
+      localStorage.removeItem(SESSION_KEY);
+      localStorage.removeItem("ipi_user");
+    } catch {
+      /* session cleared in memory */
+    }
   };
-
+  const mutate = (action: Action) => {
+    try {
+      // Read the latest persisted rows before checking permissions (also covers role changes in another tab).
+      const raw = localStorage.getItem(DB_KEY);
+      const current = raw ? (JSON.parse(raw) as Database) : dbRef.current;
+      const next = applyAction(current, sessionRef.current, action);
+      localStorage.setItem(DB_KEY, JSON.stringify(next));
+      dbRef.current = next;
+      setDatabase(next);
+      setStorageError("");
+      return {};
+    } catch (error) {
+      return {
+        error:
+          error instanceof DOMException
+            ? "Penyimpanan penuh atau tidak tersedia. Coba foto yang lebih kecil."
+            : error instanceof Error
+              ? error.message
+              : "Perubahan gagal disimpan.",
+      };
+    }
+  };
+  const account = database.accounts.find((a) => a.id === sessionId);
+  const user: User | null = account
+    ? {
+        id: account.id,
+        name: account.name,
+        email: account.email,
+        role: account.role,
+        avatar: database.profiles.find((p) => p.userId === account.id)?.avatar,
+      }
+    : null;
   return (
-    <AuthContext.Provider value={{ user, isLoading, login, logout }}>
+    <AuthContext.Provider
+      value={{ user, isLoading, database, storageError, login, logout, mutate }}
+    >
       {children}
     </AuthContext.Provider>
   );
 }
-
 export function useAuth() {
-  const ctx = useContext(AuthContext);
-  if (!ctx) throw new Error("useAuth must be used within AuthProvider");
-  return ctx;
+  const context = useContext(AuthContext);
+  if (!context) throw new Error("useAuth must be used within AuthProvider");
+  return context;
 }

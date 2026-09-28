@@ -1,11 +1,16 @@
+"use client";
+import { useAuth } from "@/contexts/auth-context";
+import { IndonesiaMap } from "@/components/dashboard/indonesia-map";
 import React from "react";
-import { MOCK_EMPLOYEES, MOCK_PROGRAMS, MOCK_MONEV, type ProgramKerja } from "@/lib/mock-data";
+import { MOCK_PROGRAMS, MOCK_MONEV, type ProgramKerja } from "@/lib/mock-data";
 import { Users, ClipboardList, BarChart3, TrendingUp, CheckCircle2, Clock, AlertTriangle, ChevronRight } from "lucide-react";
 import Link from "next/link";
 
 export default function DashboardPage() {
-  const totalEmployees = MOCK_EMPLOYEES.length;
-  const activeEmployees = MOCK_EMPLOYEES.filter((e) => e.status === "aktif").length;
+  const { user, database } = useAuth();
+  const researchers = database.accounts.filter(a => a.role === "periset");
+  const totalEmployees = researchers.length;
+  const activeEmployees = researchers.filter(a => database.profiles.some(p => p.userId === a.id && p.status === "aktif")).length;
   const totalPrograms = MOCK_PROGRAMS.length;
   const completedPrograms = MOCK_PROGRAMS.filter((p) => p.status === "selesai").length;
   const runningPrograms = MOCK_PROGRAMS.filter((p) => p.status === "berjalan").length;
@@ -23,7 +28,7 @@ export default function DashboardPage() {
       color: "bg-blue-500",
       light: "bg-blue-50",
       textColor: "text-blue-600",
-      href: "/dashboard/karyawan",
+      href: user?.role === "admin" ? "/dashboard/karyawan" : "/dashboard/profil",
     },
     {
       label: "Program Kerja",
@@ -109,6 +114,7 @@ export default function DashboardPage() {
         ))}
       </div>
 
+      <IndonesiaMap />
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Program Kerja Terbaru */}
         <div className="bg-white rounded-2xl border border-slate-200 shadow-sm">

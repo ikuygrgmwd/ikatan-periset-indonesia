@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect } from "react";
-import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
 import { useAuth } from "@/contexts/auth-context";
 import { DashboardSidebar } from "@/components/dashboard/sidebar";
 import { DashboardTopbar } from "@/components/dashboard/topbar";
@@ -12,8 +13,13 @@ export default function DashboardLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const { user, isLoading } = useAuth();
+  const { user, isLoading, storageError } = useAuth();
   const router = useRouter();
+  const pathname = usePathname();
+  const forbidden =
+    (pathname === "/dashboard/karyawan" ||
+      pathname.startsWith("/dashboard/karyawan/")) &&
+    user?.role !== "admin";
 
   useEffect(() => {
     if (!isLoading && !user) {
@@ -37,9 +43,33 @@ export default function DashboardLayout({
   return (
     <div className="flex h-screen bg-slate-100 overflow-hidden">
       <DashboardSidebar />
-      <div className="flex-1 flex flex-col overflow-hidden">
+      <div className="min-w-0 flex-1 flex flex-col overflow-hidden">
         <DashboardTopbar />
-        <main className="flex-1 overflow-y-auto p-6">{children}</main>
+        <main className="flex-1 overflow-y-auto p-4 md:p-6">
+          {storageError && (
+            <p
+              role="alert"
+              className="mb-4 rounded-xl bg-amber-50 p-4 text-sm text-amber-800"
+            >
+              {storageError}
+            </p>
+          )}
+          {forbidden ? (
+            <section className="rounded-2xl border bg-white p-8">
+              <h1 className="text-xl font-bold text-slate-900">
+                Akses khusus Admin
+              </h1>
+              <p className="my-3 text-slate-600">
+                Halaman Karyawan &amp; Periset hanya tersedia untuk Admin.
+              </p>
+              <Link href="/dashboard" className="text-blue-700 underline">
+                Kembali ke Dashboard
+              </Link>
+            </section>
+          ) : (
+            children
+          )}
+        </main>
       </div>
     </div>
   );

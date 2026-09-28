@@ -42,7 +42,7 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-sans);
+  --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
   --font-heading: var(--font-sans);
   --color-sidebar-ring: var(--sidebar-ring);
@@ -83,12 +83,7 @@
   --radius-4xl: calc(var(--radius) * 2.6);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
+
 
 body {
   background: var(--background);
@@ -141,3 +136,20 @@ body {
     @apply font-sans;
   }
 }
+
+/* The portal uses light form surfaces, including inside dark decorative sections.
+   Explicit foreground/background colors also cover legacy native form controls. */
+input:not([type="checkbox"]):not([type="radio"]):not([type="range"]),
+textarea, select, [data-slot="select-trigger"], [data-slot="select-content"] {
+  color: #0f172a;
+  background-color: #ffffff;
+  caret-color: #1d4ed8;
+  color-scheme: light;
+}
+input::placeholder, textarea::placeholder { color: #64748b; opacity: 1; }
+select option { color: #0f172a; background-color: #fff; }
+input:disabled, textarea:disabled, select:disabled { color: #475569; background-color: #f1f5f9; }
+input:-webkit-autofill { -webkit-text-fill-color: #0f172a; box-shadow: 0 0 0 1000px #fff inset; }
+@keyframes earth-beacon { 0%, 100% { opacity: .12; } 50% { opacity: .5; } }
+.earth-beacon { animation: earth-beacon 4s ease-in-out infinite; }
+@media (prefers-reduced-motion: reduce) { .earth-beacon { animation: none; } }

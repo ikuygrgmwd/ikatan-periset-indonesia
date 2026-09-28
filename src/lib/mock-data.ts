@@ -7,7 +7,7 @@ export type User = {
   id: string;
   name: string;
   email: string;
-  role: "admin" | "operator" | "viewer";
+  role: "admin" | "periset";
   avatar?: string;
 };
 
@@ -68,7 +68,7 @@ export const MOCK_USERS: User[] = [
     id: "u2",
     name: "Siti Nurhaliza",
     email: "operator@periset.or.id",
-    role: "operator",
+    role: "periset",
     avatar: "",
   },
 ];
