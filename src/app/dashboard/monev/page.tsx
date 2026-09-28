@@ -1,9 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { MOCK_MONEV, type MonevItem } from "@/lib/mock-data";
+import { type MonevItem } from "@/lib/mock-data";
+import { useMonev } from "@/hooks/use-programs";
 import {
-  Plus, Pencil, Trash2, X, Check, TrendingUp, TrendingDown, Minus,
+  Plus, Pencil, Trash2, X, Check, TrendingUp, TrendingDown, Minus, Loader2,
 } from "lucide-react";
 
 const emptyMonev: Omit<MonevItem, "id"> = {
@@ -38,7 +39,7 @@ function CapaianBadge({ value }: { value: number }) {
 }
 
 export default function MonevPage() {
-  const [monevList, setMonevList] = useState<MonevItem[]>(MOCK_MONEV);
+  const { monevList, isLoading, add, edit, remove } = useMonev();
   const [modalOpen, setModalOpen] = useState(false);
   const [editTarget, setEditTarget] = useState<MonevItem | null>(null);
   const [form, setForm] = useState<Omit<MonevItem, "id">>(emptyMonev);
@@ -63,21 +64,27 @@ export default function MonevPage() {
     setModalOpen(true);
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
     if (!form.namaProgram) return;
     if (editTarget) {
-      setMonevList((prev) => prev.map((m) => (m.id === editTarget.id ? { ...editTarget, ...form } : m)));
+      await edit(editTarget.id, form);
     } else {
-      setMonevList((prev) => [...prev, { ...form, id: `m${Date.now()}` }]);
+      await add(form);
     }
     setModalOpen(false);
   };
 
-  const handleDelete = () => {
+  const handleDelete = async () => {
     if (!deleteTarget) return;
-    setMonevList((prev) => prev.filter((m) => m.id !== deleteTarget.id));
+    await remove(deleteTarget.id);
     setDeleteTarget(null);
   };
+
+  if (isLoading) return (
+    <div className="flex items-center justify-center py-12">
+      <Loader2 className="w-8 h-8 text-blue-600 animate-spin" />
+    </div>
+  );
 
   return (
     <div className="space-y-6">

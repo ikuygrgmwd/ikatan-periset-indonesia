@@ -1,22 +1,26 @@
 "use client";
 import { useAuth } from "@/contexts/auth-context";
 import { IndonesiaMap } from "@/components/dashboard/indonesia-map";
+import { useEmployees } from "@/hooks/use-employees";
+import { useProgramKerja, useMonev } from "@/hooks/use-programs";
 import React from "react";
-import { MOCK_PROGRAMS, MOCK_MONEV, type ProgramKerja } from "@/lib/mock-data";
+import { type ProgramKerja } from "@/lib/mock-data";
 import { Users, ClipboardList, BarChart3, TrendingUp, CheckCircle2, Clock, AlertTriangle, ChevronRight } from "lucide-react";
 import Link from "next/link";
 
 export default function DashboardPage() {
-  const { user, database } = useAuth();
-  const researchers = database.accounts.filter(a => a.role === "periset");
-  const totalEmployees = researchers.length;
-  const activeEmployees = researchers.filter(a => database.profiles.some(p => p.userId === a.id && p.status === "aktif")).length;
-  const totalPrograms = MOCK_PROGRAMS.length;
-  const completedPrograms = MOCK_PROGRAMS.filter((p) => p.status === "selesai").length;
-  const runningPrograms = MOCK_PROGRAMS.filter((p) => p.status === "berjalan").length;
+  const { user } = useAuth();
+  const { employees } = useEmployees();
+  const { programs } = useProgramKerja();
+  const { monevList } = useMonev();
+  const totalEmployees = employees.length;
+  const activeEmployees = employees.filter(e => e.status === "aktif").length;
+  const totalPrograms = programs.length;
+  const completedPrograms = programs.filter((p) => p.status === "selesai").length;
+  const runningPrograms = programs.filter((p) => p.status === "berjalan").length;
   const avgCapaian =
-    MOCK_MONEV.length > 0
-      ? Math.round(MOCK_MONEV.reduce((s, m) => s + m.capaian, 0) / MOCK_MONEV.length)
+    monevList.length > 0
+      ? Math.round(monevList.reduce((s, m) => s + m.capaian, 0) / monevList.length)
       : 0;
 
   const stats = [
@@ -28,7 +32,7 @@ export default function DashboardPage() {
       color: "bg-blue-500",
       light: "bg-blue-50",
       textColor: "text-blue-600",
-      href: user?.role === "admin" ? "/dashboard/karyawan" : "/dashboard/profil",
+      href: user?.role === "admin" ? "/dashboard/karyawan" : "/dashboard/settings",
     },
     {
       label: "Program Kerja",
@@ -125,7 +129,7 @@ export default function DashboardPage() {
             </Link>
           </div>
           <div className="divide-y divide-slate-100">
-            {MOCK_PROGRAMS.slice(0, 5).map((p) => (
+            {programs.slice(0, 5).map((p) => (
               <div key={p.id} className="px-5 py-3.5 flex items-center gap-4">
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-semibold text-slate-700 truncate">{p.nama}</p>
@@ -151,7 +155,7 @@ export default function DashboardPage() {
             </Link>
           </div>
           <div className="p-5 space-y-4">
-            {MOCK_MONEV.slice(0, 5).map((m) => (
+            {monevList.slice(0, 5).map((m) => (
               <div key={m.id}>
                 <div className="flex items-center justify-between mb-1.5">
                   <p className="text-xs font-medium text-slate-600 truncate max-w-[70%]">
@@ -193,3 +197,5 @@ export default function DashboardPage() {
     </div>
   );
 }
+
+

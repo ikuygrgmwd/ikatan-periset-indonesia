@@ -33,7 +33,7 @@ export function DashboardTopbar() {
           <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full"></span>
         </button>
 
-        <Link href="/dashboard/profil" className="flex items-center gap-3 pl-3 border-l border-slate-200">
+        <Link href="/dashboard/settings" className="flex items-center gap-3 pl-3 border-l border-slate-200">
           <div className="w-9 h-9 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white font-semibold text-sm">
             {user?.avatar ? <img src={user.avatar} alt="Foto profil" className="h-9 w-9 rounded-full object-cover" /> : user?.name?.charAt(0) || "U"}
           </div>

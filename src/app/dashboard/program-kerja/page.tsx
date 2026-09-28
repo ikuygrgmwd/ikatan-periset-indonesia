@@ -1,10 +1,11 @@
 "use client";
 
 import React, { useState } from "react";
-import { MOCK_PROGRAMS, type ProgramKerja } from "@/lib/mock-data";
+import { type ProgramKerja } from "@/lib/mock-data";
+import { useProgramKerja } from "@/hooks/use-programs";
 import {
   Plus, Pencil, Trash2, Search, X, Check, Calendar, Users2,
-  CheckCircle2, Clock, AlertTriangle, CircleDot
+  CheckCircle2, Clock, AlertTriangle, CircleDot, Loader2
 } from "lucide-react";
 
 const emptyProgram: Omit<ProgramKerja, "id"> = {
@@ -64,7 +65,7 @@ function ProgressBar({ value, status }: { value: number; status: ProgramKerja["s
 }
 
 export default function ProgramKerjaPage() {
-  const [programs, setPrograms] = useState<ProgramKerja[]>(MOCK_PROGRAMS);
+  const { programs, isLoading, add, edit, remove } = useProgramKerja();
   const [search, setSearch] = useState("");
   const [filterStatus, setFilterStatus] = useState<string>("semua");
   const [modalOpen, setModalOpen] = useState(false);
@@ -93,21 +94,19 @@ export default function ProgramKerjaPage() {
     setModalOpen(true);
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
     if (!form.nama || !form.divisi) return;
     if (editTarget) {
-      setPrograms((prev) =>
-        prev.map((p) => (p.id === editTarget.id ? { ...editTarget, ...form } : p))
-      );
+      await edit(editTarget.id, form);
     } else {
-      setPrograms((prev) => [...prev, { ...form, id: `p${Date.now()}` }]);
+      await add(form);
     }
     setModalOpen(false);
   };
 
-  const handleDelete = () => {
+  const handleDelete = async () => {
     if (!deleteTarget) return;
-    setPrograms((prev) => prev.filter((p) => p.id !== deleteTarget.id));
+    await remove(deleteTarget.id);
     setDeleteTarget(null);
   };
 
@@ -116,7 +115,14 @@ export default function ProgramKerjaPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex items-center justify-between">
+      {isLoading && (
+        <div className="flex items-center justify-center py-12">
+          <Loader2 className="w-8 h-8 text-blue-600 animate-spin" />
+        </div>
+      )}
+      {!isLoading && (
+        <>
+          <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-extrabold text-slate-800">Program Kerja</h1>
           <p className="text-slate-500 text-sm mt-1">Kelola seluruh program kerja IPI</p>
@@ -322,6 +328,8 @@ export default function ProgramKerjaPage() {
             </div>
           </div>
         </div>
+      )}
+        </>
       )}
     </div>
   );

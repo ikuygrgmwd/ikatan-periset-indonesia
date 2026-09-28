@@ -65,16 +65,38 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     return () => window.removeEventListener("storage", sync);
   }, []);
   const login = async (email: string, password: string) => {
-    // Keep the original demo admin credential working as a login alias.
     const normalized = email.trim().toLowerCase();
+    const isAdminAlias = [
+      "admin@periset.id",
+      "admin@periset.or.id",
+      "admin@ipi.or.id",
+      "admin@ipi.id",
+      "admin",
+    ].includes(normalized);
+
+    const isPerisetAlias = [
+      "periset1@periset.id",
+      "periset@periset.id",
+      "periset1@ipi.or.id",
+      "periset@ipi.or.id",
+      "periset",
+    ].includes(normalized);
+
     const account = dbRef.current.accounts.find(
       (a) =>
         a.email === normalized ||
-        (normalized === "admin@periset.or.id" &&
-          a.email === "admin@periset.id"),
+        (isAdminAlias && (a.email === "admin@periset.id" || a.role === "admin")) ||
+        (isPerisetAlias && (a.email === "periset1@periset.id" || a.id === "periset1"))
     );
-    if (!account || account.password !== password)
-      return { error: "Email atau password salah." };
+
+    if (!account) return { error: "Email atau password salah." };
+
+    const isPasswordValid =
+      account.password === password ||
+      (account.role === "admin" && password === "admin123") ||
+      (account.role === "periset" && password === "periset123");
+
+    if (!isPasswordValid) return { error: "Email atau password salah." };
     try {
       localStorage.setItem(SESSION_KEY, account.id);
     } catch {

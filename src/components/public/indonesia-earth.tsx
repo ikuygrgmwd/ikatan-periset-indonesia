@@ -95,16 +95,18 @@ const neighbors = [
     [110.6, 1],
   ],
 ];
-export function IndonesiaEarth() {
+
+/** Renders the Earth SVG as an absolute-positioned background layer. Wrap this inside a `relative` hero container. */
+export function IndonesiaEarthBackground() {
   return (
     <div
-      className="pointer-events-none relative overflow-hidden bg-[#030c1c]"
+      className="absolute inset-0 overflow-hidden pointer-events-none select-none"
       aria-hidden="true"
     >
       <svg
         viewBox="0 0 1200 520"
-        className="mx-auto h-[260px] w-full sm:h-[380px] lg:h-[440px]"
-        preserveAspectRatio="xMidYMid slice"
+        className="absolute right-[-10%] top-1/2 -translate-y-1/2 h-[110%] w-auto opacity-40 sm:opacity-50 lg:opacity-60 lg:right-[-5%]"
+        preserveAspectRatio="xMidYMid meet"
       >
         <defs>
           <radialGradient id="earth-ocean" cx="32%" cy="26%" r="78%">
@@ -130,31 +132,7 @@ export function IndonesiaEarth() {
           <clipPath id="earth-disc">
             <circle cx="720" cy="280" r="290" />
           </clipPath>
-          <pattern
-            id="space-grid"
-            width="60"
-            height="60"
-            patternUnits="userSpaceOnUse"
-          >
-            <path
-              d="M60 0H0V60"
-              fill="none"
-              stroke="#164e63"
-              strokeOpacity=".18"
-            />
-          </pattern>
         </defs>
-        <rect width="1200" height="520" fill="url(#space-grid)" />
-        {Array.from({ length: 55 }, (_, i) => (
-          <circle
-            key={i}
-            cx={(i * 193 + 17) % 1200}
-            cy={(i * 97 + 11) % 520}
-            r={i % 4 === 0 ? 1.3 : 0.7}
-            fill="#a5d9ed"
-            opacity={0.2 + (i % 5) * 0.13}
-          />
-        ))}
         <circle cx="720" cy="280" r="311" fill="url(#earth-atmosphere)" />
         <circle
           cx="720"
@@ -230,36 +208,10 @@ export function IndonesiaEarth() {
             );
           })}
         </g>
-        <g fill="#a5f3fc" fontFamily="monospace">
-          <text x="110" y="188" fontSize="11" letterSpacing="4">
-            CONNECTED THROUGH SCIENCE
-          </text>
-          <text x="110" y="232" fontSize="34" fill="#f0f9ff" letterSpacing="2">
-            NUSANTARA
-          </text>
-          <text x="110" y="262" fontSize="13" fill="#94a3b8">
-            Satu bumi. Ribuan gagasan.
-          </text>
-          <path d="M110 285H250" stroke="#22d3ee" strokeWidth="2" />
-          <text x="110" y="313" fontSize="10" letterSpacing="2">
-            INDONESIA / 118° E · 5° S
-          </text>
-        </g>
-        <g fill="none" stroke="#67e8f9" opacity=".45">
-          <path d="M670 293L630 340H520" />
-          <circle cx="670" cy="293" r="14" />
-        </g>
-        <text
-          x="520"
-          y="360"
-          fontFamily="monospace"
-          fontSize="10"
-          letterSpacing="3"
-          fill="#a5f3fc"
-        >
-          INDONESIA
-        </text>
       </svg>
     </div>
   );
 }
+
+/** @deprecated Use IndonesiaEarthBackground instead — kept only so existing imports don't break during transition. */
+export const IndonesiaEarth = IndonesiaEarthBackground;

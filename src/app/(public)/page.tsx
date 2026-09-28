@@ -1,4 +1,4 @@
-import { IndonesiaEarth } from "@/components/public/indonesia-earth";
+import { IndonesiaEarthBackground } from "@/components/public/indonesia-earth";
 import Link from "next/link";
 import { MOCK_NEWS } from "@/lib/mock-data";
 import { Calendar, ArrowRight, Users, BookOpen, Award, TrendingUp, ChevronRight } from "lucide-react";
@@ -69,16 +69,18 @@ const stats = [
 export default function HomePage() {
   return (
     <>
-      <IndonesiaEarth />
-      {/* Hero Section */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-slate-900 via-blue-950 to-indigo-900 text-white">
+      {/* Hero Section — Earth visual is integrated as background */}
+      <section className="relative overflow-hidden bg-gradient-to-br from-slate-900 via-blue-950 to-indigo-900 text-white min-h-[520px] flex items-center">
         {/* Background blobs */}
         <div className="absolute inset-0 pointer-events-none">
           <div className="absolute top-20 left-1/4 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl" />
           <div className="absolute bottom-10 right-1/4 w-80 h-80 bg-indigo-500/10 rounded-full blur-3xl" />
         </div>
 
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 md:py-36">
+        {/* Earth background — positioned behind hero content */}
+        <IndonesiaEarthBackground />
+
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 md:py-36 w-full">
           <div className="max-w-3xl">
             <span className="inline-block px-4 py-1.5 rounded-full bg-blue-500/20 text-blue-300 text-sm font-semibold border border-blue-500/30 mb-6">
               🔬 Portal Resmi Ikatan Periset Indonesia
@@ -188,7 +190,7 @@ export default function HomePage() {
                 Terbaru
               </span>
               <h2 className="mt-1 text-3xl md:text-4xl font-extrabold text-slate-800">
-                Berita & Informasi
+                Berita &amp; Informasi
               </h2>
             </div>
             <Link

@@ -20,7 +20,6 @@ const navItems = [
     href: "/dashboard",
     icon: LayoutDashboard,
   },
-  { label: "Profil Saya", href: "/dashboard/profil", icon: Users },
   { label: "Portofolio Saya", href: "/dashboard/portofolio", icon: ClipboardList },
   {
     label: "Karyawan & Periset",

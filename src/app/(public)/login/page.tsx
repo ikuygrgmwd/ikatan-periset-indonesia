@@ -147,7 +147,7 @@ export default function LoginPage() {
                 setPassword("admin123");
                 setError("");
               }}
-              className="flex-1 rounded-lg border border-blue-300/40 px-3 py-2 text-xs font-semibold text-white hover:bg-white/10"
+              className="flex-1 rounded-xl bg-blue-500/20 border border-blue-400/40 px-3 py-2.5 text-xs font-bold text-white hover:bg-blue-500/30 transition-all shadow-sm"
             >
               Isi Demo Admin
             </button>
@@ -158,33 +158,41 @@ export default function LoginPage() {
                 setPassword("periset123");
                 setError("");
               }}
-              className="flex-1 rounded-lg border border-blue-300/40 px-3 py-2 text-xs font-semibold text-white hover:bg-white/10"
+              className="flex-1 rounded-xl bg-white/10 border border-white/20 px-3 py-2.5 text-xs font-bold text-white hover:bg-white/20 transition-all"
             >
               Isi Demo Periset
             </button>
           </div>
-          <div className="mt-6 p-4 bg-white/5 border border-white/10 rounded-xl text-center">
-            <p className="text-blue-200 text-xs font-semibold mb-1">
-              🔑 Demo Login
+          <div className="mt-5 p-4 bg-white/5 border border-white/10 rounded-2xl text-center">
+            <p className="text-blue-200 text-xs font-semibold mb-2">
+              🔑 Kredensial Demo Akun
             </p>
-            <p className="text-blue-300 text-xs">
-              Email:{" "}
-              <span className="text-white font-mono">admin@periset.id</span>
-            </p>
-            <p className="text-blue-300 text-xs">
-              Password Admin:{" "}
-              <span className="text-white font-mono">admin123</span>
-            </p>
-            <p className="mt-3 text-xs text-blue-200">
-              Periset:{" "}
-              <span className="font-mono text-white">periset1@periset.id</span>
-            </p>
-            <p className="text-xs text-blue-200">
-              Password: <span className="font-mono text-white">periset123</span>
-            </p>
-            <p className="mt-3 text-xs text-blue-200">
-              Demo lokal · Perubahan tersimpan pada browser ini.
-            </p>
+            <div className="text-xs text-blue-300 space-y-1">
+              <p>
+                Admin: <span className="text-white font-mono font-bold">admin@periset.id</span> (atau cukup ketik <span className="text-white font-mono">admin</span>)
+              </p>
+              <p>
+                Password: <span className="text-white font-mono font-bold">admin123</span>
+              </p>
+            </div>
+            <div className="mt-3 pt-3 border-t border-white/10">
+              <button
+                type="button"
+                onClick={() => {
+                  try {
+                    localStorage.removeItem("ipi_database_v1");
+                    localStorage.removeItem("ipi_session_v1");
+                    localStorage.removeItem("ipi_user");
+                    window.location.reload();
+                  } catch (e) {
+                    console.error(e);
+                  }
+                }}
+                className="text-[11px] text-amber-300 hover:text-amber-200 underline font-medium"
+              >
+                🔄 Reset Data Akun / Password ke Semula
+              </button>
+            </div>
           </div>
 
           <p className="text-center text-blue-300 text-sm mt-6">
