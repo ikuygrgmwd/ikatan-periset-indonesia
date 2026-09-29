@@ -10,6 +10,7 @@ import {
   Settings,
   ChevronLeft,
   FlaskConical,
+  Wallet,
 } from "lucide-react";
 import { useAuth } from "@/contexts/auth-context";
 import { cn } from "@/lib/utils";
@@ -40,6 +41,11 @@ const navItems = [
     label: "Pengaturan Akun",
     href: "/dashboard/settings",
     icon: Settings,
+  },
+  {
+    label: "Iuran Kelembagaan",
+    href: "/dashboard/iuran-kelembagaan",
+    icon: Wallet,
   },
 ];
 
