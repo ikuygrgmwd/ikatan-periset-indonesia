@@ -2,6 +2,7 @@
 
 import { createContext, useContext, useEffect, useRef, useState } from "react";
 import type { User } from "@/lib/mock-data";
+import { bayarIuran, sinkronkanIuran, tanggalHariIni } from "@/lib/iuran";
 import {
   applyAction,
   createSeedDatabase,
@@ -11,6 +12,7 @@ import {
   type Database,
 } from "@/lib/research-store";
 
+type AuthAction = Action | { type: "iuran.pay"; id: string };
 type AuthContextType = {
   user: User | null;
   isLoading: boolean;
@@ -18,7 +20,7 @@ type AuthContextType = {
   storageError: string;
   login: (email: string, password: string) => Promise<{ error?: string }>;
   logout: () => void;
-  mutate: (action: Action) => { error?: string };
+  mutate: (action: AuthAction) => { error?: string };
 };
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export function AuthProvider({ children }: { children: React.ReactNode }) {
@@ -42,7 +44,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           !Array.isArray(db.works)
         )
           throw new Error("Invalid database");
-        if (!raw) localStorage.setItem(DB_KEY, JSON.stringify(db));
+        db.iuran = sinkronkanIuran(db.iuran, db.accounts, tanggalHariIni());
+        if (!raw || JSON.stringify(db) !== raw) localStorage.setItem(DB_KEY, JSON.stringify(db));
         const storedId = localStorage.getItem(SESSION_KEY);
         const id = db.accounts.some((a) => a.id === storedId) ? storedId : null;
         dbRef.current = db;
@@ -119,12 +122,18 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       /* session cleared in memory */
     }
   };
-  const mutate = (action: Action) => {
+  const mutate = (action: AuthAction) => {
     try {
       // Read the latest persisted rows before checking permissions (also covers role changes in another tab).
       const raw = localStorage.getItem(DB_KEY);
       const current = raw ? (JSON.parse(raw) as Database) : dbRef.current;
-      const next = applyAction(current, sessionRef.current, action);
+      const today = tanggalHariIni();
+      const ledger = sinkronkanIuran(current.iuran, current.accounts, today);
+      const actor = current.accounts.find((a) => a.id === sessionRef.current) ?? null;
+      const next = action.type === "iuran.pay"
+        ? { ...current, iuran: bayarIuran(ledger, actor, action.id, today) }
+        : applyAction(current, sessionRef.current, action);
+      next.iuran = sinkronkanIuran(next.iuran, next.accounts, today);
       localStorage.setItem(DB_KEY, JSON.stringify(next));
       dbRef.current = next;
       setDatabase(next);
@@ -134,7 +143,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       return {
         error:
           error instanceof DOMException
-            ? "Penyimpanan penuh atau tidak tersedia. Coba foto yang lebih kecil."
+            ? action.type === "iuran.pay"
+              ? "Pembayaran belum disimpan. Penyimpanan browser penuh atau tidak tersedia."
+              : "Penyimpanan penuh atau tidak tersedia. Coba foto yang lebih kecil."
             : error instanceof Error
               ? error.message
               : "Perubahan gagal disimpan.",

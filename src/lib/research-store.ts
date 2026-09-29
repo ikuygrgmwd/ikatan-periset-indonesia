@@ -1,5 +1,6 @@
 // Browser-local demo database. Authorization here models application permissions;
 // production must enforce the same rules in a server-side database/auth service.
+import type { Iuran } from "./iuran";
 export type Role = "admin" | "periset";
 export type Account = {
   id: string;
@@ -40,6 +41,7 @@ export type PortfolioEntry = {
 };
 export type Database = {
   version: 1;
+  iuran?: Iuran[];
   accounts: Account[];
   profiles: Profile[];
   publications: PortfolioEntry[];
