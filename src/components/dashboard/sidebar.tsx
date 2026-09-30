@@ -17,7 +17,7 @@ import { cn } from "@/lib/utils";
 
 const navItems = [
   {
-    label: "Dashboard",
+    label: "Dasbor",
     href: "/dashboard",
     icon: LayoutDashboard,
   },
@@ -33,7 +33,7 @@ const navItems = [
     icon: ClipboardList,
   },
   {
-    label: "Monitoring & Evaluasi",
+    label: "Pemantauan & Evaluasi",
     href: "/dashboard/monev",
     icon: BarChart3,
   },
@@ -43,8 +43,8 @@ const navItems = [
     icon: Settings,
   },
   {
-    label: "Iuran Kelembagaan",
-    href: "/dashboard/iuran-kelembagaan",
+    label: "Donasi untuk Lembaga",
+    href: "/dashboard/donasi",
     icon: Wallet,
   },
 ];

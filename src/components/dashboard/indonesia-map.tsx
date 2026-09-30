@@ -1,210 +1,120 @@
 "use client";
-import { useState } from "react";
+
+import { useEffect, useMemo, useRef, useState } from "react";
+import type { Map as MapLibreMap, GeoJSONSource, StyleSpecification } from "maplibre-gl";
+import "maplibre-gl/dist/maplibre-gl.css";
+import { MapPin, RotateCcw } from "lucide-react";
 import { useAuth } from "@/contexts/auth-context";
 import { researcherHubs } from "@/lib/research-store";
-import {
-  INDONESIA_ISLANDS,
-  mapPoint,
-  polygonPath,
-} from "@/lib/indonesia-geometry";
-import { MapPin } from "lucide-react";
-export function IndonesiaMap() {
+import { EMPTY_REGIONS, hubGeoJSON, INDONESIA_BOUNDS, type RegionalData } from "@/lib/map-data";
+
+export function IndonesiaMap({ regions = EMPTY_REGIONS }: { regions?: RegionalData }) {
   const { database } = useAuth();
+  const hubs = useMemo(() => researcherHubs(database), [database]);
+  const points = useMemo(() => hubGeoJSON(hubs), [hubs]);
   const [active, setActive] = useState<string | null>(null);
-  const hubs = researcherHubs(database);
-  const selected = hubs.find((h) => h.id === active);
-  const total = hubs.reduce((sum, hub) => sum + hub.count, 0);
-  return (
-    <section
-      className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm"
-      aria-labelledby="map-heading"
-    >
-      <div className="flex flex-wrap items-start justify-between gap-3 border-b p-5">
-        <div>
-          <h2 id="map-heading" className="font-bold text-slate-900">
-            Jejaring Periset Nusantara
-          </h2>
-          <p className="mt-1 text-sm text-slate-500">
-            Arahkan kursor, fokuskan, atau sentuh titik untuk melihat lokasi.
-          </p>
-        </div>
-        <span className="rounded-full bg-blue-50 px-3 py-1.5 text-xs font-semibold text-blue-700">
-          {total} periset · {hubs.filter((h) => h.count > 0).length} hub
-        </span>
-      </div>
-      <div className="relative bg-gradient-to-br from-slate-50 to-blue-50 p-3 sm:p-5">
-        <div
-          className="mb-1 flex min-h-12 items-center gap-3 text-sm"
-          aria-live="polite"
-        >
-          <MapPin className="h-5 w-5 text-blue-600" />
-          <div>
-            {selected ? (
-              <>
-                <p className="font-bold text-slate-900">
-                  {selected.name}, {selected.region}
-                </p>
-                <p className="text-slate-600">
-                  {selected.count} periset terdaftar
-                </p>
-              </>
-            ) : (
-              <>
-                <p className="font-semibold text-slate-800">
-                  Satu jejaring, seluruh Indonesia
-                </p>
-                <p className="text-slate-500">
-                  Jumlah mengikuti akun ber-role Periset.
-                </p>
-              </>
-            )}
-          </div>
-        </div>
-        <svg
-          viewBox="0 0 1000 410"
-          className="w-full"
-          role="group"
-          aria-label="Peta interaktif persebaran periset Indonesia"
-        >
-          <defs>
-            <pattern
-              id="map-grid"
-              width="40"
-              height="40"
-              patternUnits="userSpaceOnUse"
-            >
-              <path
-                d="M40 0H0V40"
-                fill="none"
-                stroke="#dbeafe"
-                strokeWidth="0.7"
-              />
-            </pattern>
-          </defs>
-          <rect width="1000" height="410" fill="url(#map-grid)" rx="12" />
-          <g
-            fill="#c4d7e9"
-            stroke="#92adc7"
-            strokeWidth="1.2"
-            strokeLinejoin="round"
-          >
-            {INDONESIA_ISLANDS.map((island) => (
-              <path key={island.name} d={polygonPath(island.coordinates)}>
-                <title>{island.name}</title>
-              </path>
-            ))}
-          </g>
-          <g fill="#64748b" fontSize="13" letterSpacing="2" aria-hidden="true">
-            <text x="90" y="210">
-              SUMATRA
-            </text>
-            <text x="290" y="360">
-              JAWA
-            </text>
-            <text x="340" y="115">
-              KALIMANTAN
-            </text>
-            <text x="565" y="235">
-              SULAWESI
-            </text>
-            <text x="690" y="290">
-              MALUKU
-            </text>
-            <text x="865" y="295">
-              PAPUA
-            </text>
-          </g>
-          {hubs.map((hub) => {
-            const [x, y] = mapPoint(hub.lon, hub.lat);
-            return (
-              <g
-                key={hub.id}
-                role="button"
-                tabIndex={0}
-                aria-label={`${hub.name}, ${hub.region}: ${hub.count} periset`}
-                className="group cursor-pointer outline-none"
-                onMouseEnter={() => setActive(hub.id)}
-                onMouseLeave={() => setActive(null)}
-                onFocus={() => setActive(hub.id)}
-                onBlur={() => setActive(null)}
-                onClick={() => setActive(hub.id)}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter" || e.key === " ") {
-                    e.preventDefault();
-                    setActive(hub.id);
-                  }
-                  if (e.key === "Escape") setActive(null);
-                }}
-              >
-                <title>
-                  {hub.name}: {hub.count} periset
-                </title>
-                <circle
-                  cx={x}
-                  cy={y}
-                  r="13"
-                  fill={hub.id === active ? "#38bdf8" : "#3b82f6"}
-                  fillOpacity="0.18"
-                  className="group-focus:stroke-blue-800 group-focus:stroke-2"
-                />
-                <circle
-                  cx={x}
-                  cy={y}
-                  r={hub.count > 1 ? 6 : 4.5}
-                  fill={hub.count ? "#2563eb" : "#94a3b8"}
-                  stroke="white"
-                  strokeWidth="2"
-                />
-              </g>
-            );
-          })}
-          {selected &&
-            (() => {
-              const [x, y] = mapPoint(selected.lon, selected.lat);
-              const tx = Math.min(800, Math.max(5, x - 80));
-              return (
-                <g role="tooltip" pointerEvents="none">
-                  <rect
-                    x={tx}
-                    y={y - 62}
-                    width="185"
-                    height="44"
-                    rx="8"
-                    fill="#0f172a"
-                  />
-                  <text
-                    x={tx + 12}
-                    y={y - 44}
-                    fill="white"
-                    fontSize="13"
-                    fontWeight="600"
-                  >
-                    {selected.name}
-                  </text>
-                  <text x={tx + 12} y={y - 28} fill="#bae6fd" fontSize="12">
-                    {selected.count} periset terdaftar
-                  </text>
-                </g>
-              );
-            })()}
-        </svg>
-        <p className="mt-2 text-xs text-slate-500">
-          Peta ilustratif · Titik menunjukkan lokasi hub riset.
-        </p>
-      </div>
-      <div className="flex flex-wrap gap-2 border-t p-4">
-        {hubs.map((hub) => (
-          <button
-            key={hub.id}
-            onClick={() => setActive(active === hub.id ? null : hub.id)}
-            onFocus={() => setActive(hub.id)}
-            aria-pressed={active === hub.id}
-            className={`rounded-lg border px-2.5 py-1 text-xs transition-colors ${active === hub.id ? "border-blue-500 bg-blue-50 text-blue-800" : "border-slate-200 text-slate-600 hover:bg-slate-50"}`}
-          >
-            {hub.name} <strong>{hub.count}</strong>
-          </button>
-        ))}
-      </div>
-    </section>
-  );
+  const [ready, setReady] = useState(false);
+  const [error, setError] = useState("");
+  const container = useRef<HTMLDivElement>(null);
+  const mapRef = useRef<MapLibreMap | null>(null);
+  const selected = hubs.find(h => h.id === active);
+
+  useEffect(() => {
+    let disposed = false;
+    let map: MapLibreMap | undefined;
+    let observer: ResizeObserver | undefined;
+    const controller = new AbortController();
+    async function initialize() {
+      try {
+        const { Map, NavigationControl, AttributionControl, setWorkerUrl } = await import("maplibre-gl");
+        const response = await fetch("https://tiles.openfreemap.org/styles/positron", { signal: controller.signal });
+        if (!response.ok) throw new Error("Sumber peta belum tersedia.");
+        const baseStyle: StyleSpecification = await response.json();
+        for (const source of Object.values(baseStyle.sources)) {
+          if (source.type === "vector") {
+            source.attribution = '<a href="https://openfreemap.org/">OpenFreeMap</a> © <a href="https://www.openmaptiles.org/">OpenMapTiles</a> · Data dari <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>';
+          }
+        }
+        if (disposed || !container.current) return;
+        setWorkerUrl("/maplibre/maplibre-gl-worker.mjs");
+        map = new Map({
+          container: container.current,
+          style: {
+            ...baseStyle,
+            sources: {
+              ...baseStyle.sources,
+              researchers: { type: "geojson", data: { type: "FeatureCollection", features: [] } },
+              "indonesia-regions": { type: "geojson", data: EMPTY_REGIONS },
+            },
+            layers: [
+              // Location names are presented in Indonesian in the accessible list.
+              ...baseStyle.layers.filter(layer => layer.type !== "symbol"),
+              { id: "regional-values", type: "fill", source: "indonesia-regions", paint: { "fill-color": ["interpolate", ["linear"], ["get", "value"], 0, "#dbeafe", 100, "#1d4ed8"], "fill-opacity": 0.45 } },
+              { id: "regional-borders", type: "line", source: "indonesia-regions", paint: { "line-color": "#60a5fa", "line-width": 1 } },
+              { id: "researcher-halos", type: "circle", source: "researchers", paint: { "circle-radius": 15, "circle-color": "#3b82f6", "circle-opacity": 0.16 } },
+              { id: "researcher-points", type: "circle", source: "researchers", paint: { "circle-radius": ["interpolate", ["linear"], ["get", "count"], 0, 4, 5, 9], "circle-color": ["case", [">", ["get", "count"], 0], "#2563eb", "#94a3b8"], "circle-stroke-color": "#ffffff", "circle-stroke-width": 2 } },
+            ],
+          },
+          bounds: INDONESIA_BOUNDS,
+          fitBoundsOptions: { padding: 24 },
+          minZoom: 1, maxZoom: 15,
+          renderWorldCopies: false,
+          attributionControl: false,
+          locale: {
+            "Map.Title": "Peta persebaran periset Indonesia",
+            "NavigationControl.ZoomIn": "Perbesar peta",
+            "NavigationControl.ZoomOut": "Perkecil peta",
+            "NavigationControl.ResetBearing": "Arahkan ke utara",
+            "AttributionControl.ToggleAttribution": "Tampilkan sumber peta",
+          },
+        });
+        mapRef.current = map;
+        map.addControl(new NavigationControl({ showCompass: false }), "top-right");
+        map.addControl(new AttributionControl({ compact: true }), "bottom-right");
+        map.scrollZoom.disable();
+        map.on("load", () => { if (!disposed) setReady(true); });
+        map.on("error", () => { if (!disposed) setError("Sebagian peta gagal dimuat. Periksa koneksi internet atau muat ulang halaman."); });
+        map.on("click", "researcher-halos", event => {
+          const id = event.features?.[0]?.properties?.id;
+          if (typeof id === "string") setActive(id);
+        });
+        map.on("mouseenter", "researcher-halos", () => { if (map) map.getCanvas().style.cursor = "pointer"; });
+        map.on("mouseleave", "researcher-halos", () => { if (map) map.getCanvas().style.cursor = ""; });
+        observer = new ResizeObserver(() => {
+          map?.resize();
+          map?.fitBounds(INDONESIA_BOUNDS, { padding: 24, duration: 0 });
+        });
+        observer.observe(container.current);
+      } catch {
+        if (!disposed) setError("Peta tidak dapat ditampilkan. Periksa koneksi internet dan dukungan WebGL peramban Anda. Daftar lokasi tetap tersedia di bawah.");
+      }
+    }
+    void initialize();
+    return () => { disposed = true; controller.abort(); observer?.disconnect(); map?.remove(); mapRef.current = null; };
+  }, []);
+
+  useEffect(() => {
+    if (!ready) return;
+    const source = mapRef.current?.getSource("researchers") as GeoJSONSource | undefined;
+    void source?.setData(points).catch(() => setError("Data lokasi belum dapat dimuat."));
+  }, [points, ready]);
+  useEffect(() => {
+    if (!ready) return;
+    const source = mapRef.current?.getSource("indonesia-regions") as GeoJSONSource | undefined;
+    void source?.setData(regions).catch(() => setError("Data wilayah belum dapat dimuat."));
+  }, [regions, ready]);
+
+  return <section className="min-w-0 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm" aria-labelledby="map-heading">
+    <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 p-5">
+      <div><h2 id="map-heading" className="font-bold text-slate-900">Jejaring Periset Nusantara</h2><p className="mt-1 text-sm text-slate-500">Jelajahi peta atau pilih lokasi untuk melihat persebaran periset.</p></div>
+      <button onClick={() => { mapRef.current?.fitBounds(INDONESIA_BOUNDS, { padding: 24, duration: 0 }); setActive(null); }} className="flex items-center gap-2 rounded-lg border border-slate-200 px-3 py-2 text-xs font-semibold text-slate-600 hover:bg-slate-50"><RotateCcw size={14} />Lihat Indonesia</button>
+    </div>
+    <div className="flex min-h-20 items-center gap-3 bg-slate-50 px-5 py-3" aria-live="polite"><MapPin className="shrink-0 text-blue-600" size={20} /><div><p className="text-sm font-semibold text-slate-800">{selected ? `${selected.name}, ${selected.region}` : "Satu jejaring, seluruh Indonesia"}</p><p className="mt-1 text-xs text-slate-500">{selected ? `${selected.count} periset terdaftar` : `${hubs.reduce((sum, h) => sum + h.count, 0)} periset di ${hubs.filter(h => h.count > 0).length} lokasi jejaring`}</p></div></div>
+    <div className="relative">
+      <div ref={container} className="h-[320px] w-full bg-blue-50 sm:h-[400px]" aria-label="Peta interaktif Indonesia" />
+      {!ready && !error && <p role="status" className="pointer-events-none absolute left-4 top-4 rounded-lg bg-white px-3 py-2 text-sm text-slate-600 shadow">Memuat peta...</p>}
+    </div>
+    {error && <p role="alert" className="bg-amber-50 px-5 py-3 text-xs text-amber-800">{error}</p>}
+    <div className="flex flex-wrap gap-2 border-t border-slate-100 p-4">{hubs.map(hub => <button key={hub.id} onClick={() => { setActive(hub.id); mapRef.current?.easeTo({ center: [hub.lon, hub.lat], zoom: 5, duration: 0 }); }} aria-pressed={active === hub.id} className={`rounded-lg border px-3 py-2 text-xs ${active === hub.id ? "border-blue-500 bg-blue-50 text-blue-800" : "border-slate-200 text-slate-600 hover:bg-slate-50"}`}>{hub.name} <strong>{hub.count}</strong></button>)}</div>
+  </section>;
 }

@@ -77,15 +77,12 @@ export default function HomePage() {
           <div className="absolute bottom-10 right-1/4 w-80 h-80 bg-indigo-500/10 rounded-full blur-3xl" />
         </div>
 
-        {/* Earth background — positioned behind hero content */}
-        <IndonesiaEarthBackground />
-
-        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-24 md:py-36 w-full">
-          <div className="max-w-3xl">
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 w-full grid items-center gap-8 lg:grid-cols-[1.05fr_1fr] lg:gap-12">
+          <div className="min-w-0">
             <span className="inline-block px-4 py-1.5 rounded-full bg-blue-500/20 text-blue-300 text-sm font-semibold border border-blue-500/30 mb-6">
               🔬 Portal Resmi Ikatan Periset Indonesia
             </span>
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold leading-tight mb-6">
+            <h1 className="text-4xl md:text-5xl font-extrabold leading-tight mb-6">
               Mendorong{" "}
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-300">
                 Inovasi Riset
@@ -112,6 +109,7 @@ export default function HomePage() {
               </Link>
             </div>
           </div>
+          <IndonesiaEarthBackground />
         </div>
       </section>
 
@@ -220,7 +218,7 @@ export default function HomePage() {
             ribuan sumber daya riset, program beasiswa, dan jaringan global.
           </p>
           <Link
-            href="/login"
+            href="/daftar"
             className="inline-flex items-center gap-2 px-8 py-3.5 rounded-xl bg-white text-blue-700 font-bold hover:bg-blue-50 shadow-xl transition-all active:scale-95"
           >
             Daftar Sekarang <ChevronRight className="w-5 h-5" />

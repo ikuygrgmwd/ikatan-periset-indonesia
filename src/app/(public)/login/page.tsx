@@ -19,7 +19,7 @@ export default function LoginPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email || !password) {
-      setError("Email dan password harus diisi.");
+      setError("Email dan kata sandi harus diisi.");
       return;
     }
     setIsLoading(true);
@@ -92,7 +92,7 @@ export default function LoginPage() {
                 htmlFor="login-password"
                 className="block text-sm font-medium text-blue-100 mb-1.5"
               >
-                Password
+                Kata sandi
               </label>
               <div className="relative">
                 <input
@@ -107,7 +107,7 @@ export default function LoginPage() {
                 <button
                   type="button"
                   aria-label={
-                    showPassword ? "Sembunyikan password" : "Tampilkan password"
+                    showPassword ? "Sembunyikan kata sandi" : "Tampilkan kata sandi"
                   }
                   onClick={() => setShowPassword(!showPassword)}
                   className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-800 transition-colors"
@@ -137,6 +137,7 @@ export default function LoginPage() {
               )}
             </button>
           </form>
+          <p className="mt-5 text-center text-sm text-blue-200">Belum memiliki akun? <Link href="/daftar" className="font-semibold text-white hover:underline">Daftar sekarang</Link></p>
 
           {/* Demo credentials */}
           <div className="mt-5 flex gap-2">
@@ -172,7 +173,7 @@ export default function LoginPage() {
                 Admin: <span className="text-white font-mono font-bold">admin@periset.id</span> (atau cukup ketik <span className="text-white font-mono">admin</span>)
               </p>
               <p>
-                Password: <span className="text-white font-mono font-bold">admin123</span>
+                Kata sandi: <span className="text-white font-mono font-bold">admin123</span>
               </p>
             </div>
             <div className="mt-3 pt-3 border-t border-white/10">
@@ -190,7 +191,7 @@ export default function LoginPage() {
                 }}
                 className="text-[11px] text-amber-300 hover:text-amber-200 underline font-medium"
               >
-                🔄 Reset Data Akun / Password ke Semula
+                🔄 Pulihkan Data Akun / Kata Sandi ke Semula
               </button>
             </div>
           </div>

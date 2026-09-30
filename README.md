@@ -31,7 +31,18 @@ The original `admin@periset.or.id / admin123` login remains an alias for the mai
 - `/dashboard/portofolio`: own Publications, Copyrights/Patents, and Other Works, each with create, read, edit, and confirmed delete. Entries include title, year, description, publisher/organization, identifier, and optional HTTP(S) link.
 - Existing `/`, `/login`, `/berita/[id]`, `/dashboard/program-kerja`, and `/dashboard/monev` routes are preserved. Program and Monev retain their existing in-memory CRUD behavior.
 
-The guest page has a decorative SVG Earth centered on Indonesia above the original blue hero. The illustration is non-interactive and supports reduced-motion preferences. Map/land outlines are simplified illustrations, not administrative boundaries.
+The landing page places a complete decorative Earth, centered on Indonesia, in a separate responsive hero column. Its land outlines are illustrative, not administrative boundaries.
+
+## Pendaftaran, donasi, dan peta
+
+- `/daftar`: pendaftaran anggota dengan nama, email unik, nomor telepon, instansi, bidang riset, lokasi jejaring, dan kata sandi. Akun baru selalu berperan sebagai periset dan dapat langsung masuk melalui `/login`.
+- `/dashboard/donasi`: nominal pilihan atau nominal sendiri (Rp1.000–Rp100.000.000), metode QRIS, Transfer Bank, Dompet Digital, dan Virtual Account. Alur konfirmasi dan pembayaran hanya simulasi; tidak ada transaksi ke penyedia pembayaran.
+- Admin dapat berdonasi dan melihat riwayat seluruh donasi. Periset hanya mendapat formulir donasi dan konfirmasi miliknya, tanpa total atau riwayat donatur lain. Pemeriksaan akses ini mengikuti batas simulasi lokal yang dijelaskan di bawah.
+- Empat donasi contoh ditambahkan sekali pada basis data lama. Donasi baru disimpan di `ipi_database_v1` dan tetap ada setelah muat ulang. Data iuran lama dipertahankan sebagai arsip; rute `/dashboard/iuran-kelembagaan` dialihkan ke halaman donasi.
+- Peta dasbor menggunakan MapLibre GL JS, peta dasar vektor OpenFreeMap/OpenStreetMap, serta titik jejaring GeoJSON. Peta memerlukan WebGL dan koneksi internet untuk ubin peta; daftar lokasi tetap tersedia bila peta gagal dimuat. Skrip `predev` dan `prebuild` menyalin worker MapLibre beserta modul pendampingnya ke `public/maplibre` secara otomatis.
+- `src/lib/map-data.ts` menyediakan tipe `RegionalData` dengan `regionCode`, `name`, dan `value`. Masukkan GeoJSON Polygon/MultiPolygon resmi melalui properti `regions` pada `IndonesiaMap` untuk mengaktifkan lapisan warna dan batas wilayah. Belum ada batas administratif contoh yang diklaim sebagai data resmi.
+
+Alur uji: daftar lalu masuk sebagai periset, buat donasi, muat ulang, kemudian masuk sebagai admin untuk memeriksa riwayat. Uji juga nominal tidak valid, email duplikat, pembatalan konfirmasi, dan tampilan seluler. Akun baru hanya menerima kata sandi yang didaftarkan, bukan kata sandi demo umum.
 
 ## Mock database schema
 

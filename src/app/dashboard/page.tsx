@@ -91,7 +91,7 @@ export default function DashboardPage() {
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h1 className="text-2xl font-extrabold text-slate-800">Dashboard Overview</h1>
+        <h1 className="text-2xl font-extrabold text-slate-800">Ringkasan Dasbor</h1>
         <p className="text-slate-500 text-sm mt-1">
           Selamat datang! Berikut ringkasan data terkini Ikatan Periset Indonesia.
         </p>

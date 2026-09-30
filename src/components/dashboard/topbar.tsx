@@ -46,7 +46,7 @@ export function DashboardTopbar() {
         <button
           onClick={handleLogout}
           className="p-2 rounded-lg text-slate-500 hover:bg-red-50 hover:text-red-600 transition-colors"
-          title="Logout"
+          title="Keluar"
         >
           <LogOut className="w-5 h-5" />
         </button>

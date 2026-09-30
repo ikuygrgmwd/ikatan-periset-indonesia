@@ -58,22 +58,25 @@ export function PublicNavbar() {
                   href="/dashboard"
                   className="px-4 py-2 rounded-lg text-sm font-medium text-slate-700 hover:bg-slate-100 transition-colors"
                 >
-                  Dashboard
+                  Dasbor
                 </Link>
                 <button
                   onClick={handleLogout}
                   className="px-4 py-2 rounded-lg text-sm font-medium text-red-600 hover:bg-red-50 transition-colors"
                 >
-                  Logout
+                  Keluar
                 </button>
               </>
             ) : (
+              <>
+              <Link href="/daftar" className="px-4 py-2 rounded-lg border border-blue-200 text-sm font-semibold text-blue-700 hover:bg-blue-50">Daftar</Link>
               <Link
                 href="/login"
                 className="px-5 py-2 rounded-lg text-sm font-semibold bg-blue-600 text-white hover:bg-blue-700 shadow-sm shadow-blue-900/20 transition-all active:scale-95"
               >
-                Login
+                Masuk
               </Link>
+              </>
             )}
           </div>
 
@@ -81,6 +84,8 @@ export function PublicNavbar() {
           <button
             className="md:hidden p-2 rounded-lg text-slate-600 hover:bg-slate-100"
             onClick={() => setMenuOpen(!menuOpen)}
+            aria-label={menuOpen ? "Tutup menu" : "Buka menu"}
+            aria-expanded={menuOpen}
           >
             {menuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
           </button>
@@ -104,20 +109,23 @@ export function PublicNavbar() {
             {user ? (
               <>
                 <Link href="/dashboard" className="block px-3 py-2.5 rounded-lg text-sm font-medium text-slate-700 hover:bg-slate-100">
-                  Dashboard
+                  Dasbor
                 </Link>
                 <button onClick={handleLogout} className="block w-full text-left px-3 py-2.5 rounded-lg text-sm font-medium text-red-600 hover:bg-red-50">
-                  Logout
+                  Keluar
                 </button>
               </>
             ) : (
+              <>
+              <Link href="/daftar" onClick={() => setMenuOpen(false)} className="mb-2 block rounded-lg border border-blue-200 px-3 py-2.5 text-center text-sm font-semibold text-blue-700">Daftar</Link>
               <Link
                 href="/login"
                 onClick={() => setMenuOpen(false)}
                 className="block px-3 py-2.5 rounded-lg text-sm font-semibold bg-blue-600 text-white text-center"
               >
-                Login
+                Masuk
               </Link>
+              </>
             )}
           </div>
         </div>

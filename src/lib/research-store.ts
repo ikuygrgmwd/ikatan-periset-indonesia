@@ -1,6 +1,7 @@
 // Browser-local demo database. Authorization here models application permissions;
 // production must enforce the same rules in a server-side database/auth service.
 import type { Iuran } from "./iuran";
+import type { Donation } from "./donations";
 export type Role = "admin" | "periset";
 export type Account = {
   id: string;
@@ -18,6 +19,7 @@ export type Profile = {
   jabatan: string;
   nip: string;
   phone: string;
+  institution?: string;
   status: "aktif" | "nonaktif";
   notifications: {
     emailBerita: boolean;
@@ -42,6 +44,7 @@ export type PortfolioEntry = {
 export type Database = {
   version: 1;
   iuran?: Iuran[];
+  donations?: Donation[];
   accounts: Account[];
   profiles: Profile[];
   publications: PortfolioEntry[];
@@ -298,6 +301,27 @@ function validateIdentity(
     "Email sudah digunakan.",
   );
 }
+export type RegistrationInput = {
+  name: string; email: string; password: string; phone: string;
+  institution: string; bidangRiset: string; locationId: string;
+};
+
+export function registerMember(db: Database, input: RegistrationInput): Database {
+  const email = input.email.trim().toLowerCase();
+  validateIdentity(db, input.name, email);
+  ensure(input.password.length >= 8, "Kata sandi minimal 8 karakter.");
+  ensure(/^[+\d][\d\s()-]{7,19}$/.test(input.phone.trim()), "Nomor telepon tidak valid.");
+  ensure(input.institution.trim().length >= 2, "Isi nama lembaga atau tulis Mandiri.");
+  ensure(input.bidangRiset.trim().length >= 2, "Isi bidang riset Anda.");
+  ensure(LOCATIONS.some(l => l.id === input.locationId), "Pilih lokasi yang valid.");
+  const id = crypto.randomUUID();
+  return {
+    ...db,
+    accounts: [...db.accounts, { id, name: input.name.trim(), email, password: input.password, role: "periset" }],
+    profiles: [...db.profiles, { ...emptyProfile(id, input.locationId), phone: input.phone.trim(), institution: input.institution.trim(), bidangRiset: input.bidangRiset.trim() }],
+  };
+}
+
 export function applyAction(
   db: Database,
   actorId: string | null,

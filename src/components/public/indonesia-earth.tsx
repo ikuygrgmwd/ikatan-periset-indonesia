@@ -96,16 +96,16 @@ const neighbors = [
   ],
 ];
 
-/** Renders the Earth SVG as an absolute-positioned background layer. Wrap this inside a `relative` hero container. */
+/** A complete globe centered on Indonesia, sized within its own hero column. */
 export function IndonesiaEarthBackground() {
   return (
     <div
-      className="absolute inset-0 overflow-hidden pointer-events-none select-none"
+      className="w-full max-w-[460px] justify-self-end pointer-events-none select-none"
       aria-hidden="true"
     >
       <svg
-        viewBox="0 0 1200 520"
-        className="absolute right-[-10%] top-1/2 -translate-y-1/2 h-[110%] w-auto opacity-40 sm:opacity-50 lg:opacity-60 lg:right-[-5%]"
+        viewBox="390 -50 660 660"
+        className="block h-auto w-full"
         preserveAspectRatio="xMidYMid meet"
       >
         <defs>
